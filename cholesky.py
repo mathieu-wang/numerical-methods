@@ -2,6 +2,8 @@ from __future__ import print_function
 
 from pprint import pprint
 from math import sqrt
+from util import transpose
+from util import mult
 
 
 def decompose(A):
@@ -16,8 +18,15 @@ if __name__ == "__main__":
     m1 = [[25, 15, -5],
           [15, 18,  0],
           [-5,  0, 11]]
-    pprint(decompose(m1))
-    print()
+
+    l1 = decompose(m1)
+    pprint(l1)
+
+    l1transpose = transpose(l1)
+    pprint(l1transpose)
+
+    product = mult(l1, l1transpose)
+    pprint(product) # SAME AS A --> DECOMPOSITION SUCCESSFUL!
 
     m2 = [[18, 22,  54,  42],
           [22, 70,  86,  62],
