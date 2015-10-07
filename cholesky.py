@@ -14,6 +14,15 @@ def decompose(A):
             L[i][j] = sqrt(A[i][i] - s) if (i == j) else (1.0 / L[j][j] * (A[i][j] - s))
     return L
 
+def forward_elim(L, b):
+    for j in xrange(len(L)):
+        b[j] = b[j]/L[j][j]
+        for i in range(j+1, len(L)):
+            b[i] = b[i] - L[i][j]*b[j] # look ahead
+
+def back_substitution():
+    pass
+
 if __name__ == "__main__":
     m1 = [[25, 15, -5],
           [15, 18,  0],
