@@ -19,16 +19,24 @@ def forward_elim(L, b):
         b[j] = b[j]/L[j][j]
         for i in range(j+1, len(L)):
             b[i] = b[i] - L[i][j]*b[j] # look ahead
+    return b
 
 def back_substitution():
     pass
 
 if __name__ == "__main__":
-    m1 = [[25, 15, -5],
+    A1 = [[25, 15, -5],
           [15, 18,  0],
           [-5,  0, 11]]
+    x1 = [[1],
+          [2],
+          [3]]
+    b1 = mult(A1, x1)
+    pprint(b1)
 
-    l1 = decompose(m1)
+
+
+    l1 = decompose(A1)
     pprint(l1)
 
     l1transpose = transpose(l1)
