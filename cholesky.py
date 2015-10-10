@@ -17,19 +17,21 @@ def decompose(A):
 
 def forward_elim(L, b):
     for j in xrange(len(L)):
-        b[j] = b[j]/L[j][j]
-        for i in range(j+1, len(L)+1):
-            b[i] = b[i] - L[i][j]*b[j] # look ahead
+        b[j][0] = b[j][0]/L[j][j]
+        for i in range(j+1, len(L)):
+            print(i)
+            print(j)
+            b[i][0] = b[i][0] - L[i][j]*b[j][0] # look ahead
     return b #actually y
 
 
 def back_substitution(L, y):
-    x = [[0.0] * len(y) for _ in xrange(len(y))] # create x with same size as y
+    x = [[0.0] * len(y[0]) for _ in xrange(len(L))] # create x with same size as y
     for i in range(len(L)-1, -1, -1):
         sum = 0
         for j in range(i+1, len(L)):
-            sum += L[j][i] * x[j]
-        x[i] = (y[i] - sum) * 1.0 / L[i][i]
+            sum += L[j][i] * x[j][0]
+        x[i][0] = (y[i][0] - sum) * 1.0 / L[i][i]
     return x
 
 
@@ -43,16 +45,19 @@ if __name__ == "__main__":
     b1 = mult(A1, x1)
     pprint(b1)
 
+    L1 = decompose(A1)
+    pprint(L1)
 
+    L1transpose = transpose(L1)
+    pprint(L1transpose)
 
-    l1 = decompose(A1)
-    pprint(l1)
-
-    l1transpose = transpose(l1)
-    pprint(l1transpose)
-
-    product = mult(l1, l1transpose)
+    product = mult(L1, L1transpose)
     pprint(product) # SAME AS A --> DECOMPOSITION SUCCESSFUL!
+
+    y1 = forward_elim(L1, b1)
+    x1chol = back_substitution(L1, y1)
+    print("x1chol:")
+    pprint(x1chol)
 
     m2 = [[18, 22,  54,  42],
           [22, 70,  86,  62],
