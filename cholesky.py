@@ -4,6 +4,7 @@ from pprint import pprint
 from math import sqrt
 from util import transpose
 from util import mult
+from util import equal
 
 
 def decompose(A):
@@ -19,8 +20,6 @@ def forward_elim(L, b):
     for j in xrange(len(L)):
         b[j][0] = b[j][0]/L[j][j]
         for i in range(j+1, len(L)):
-            print(i)
-            print(j)
             b[i][0] = b[i][0] - L[i][j]*b[j][0] # look ahead
     return b #actually y
 
@@ -52,12 +51,14 @@ if __name__ == "__main__":
     pprint(L1transpose)
 
     product = mult(L1, L1transpose)
-    pprint(product) # SAME AS A --> DECOMPOSITION SUCCESSFUL!
+
+    pprint(equal(product, A1)) # SAME AS A --> DECOMPOSITION SUCCESSFUL!
 
     y1 = forward_elim(L1, b1)
     x1chol = back_substitution(L1, y1)
-    print("x1chol:")
+
     pprint(x1chol)
+    print(equal(x1, x1chol))
 
     m2 = [[18, 22,  54,  42],
           [22, 70,  86,  62],

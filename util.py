@@ -10,3 +10,13 @@ def mult(A, B):
            for k in range(len(B)):
                result[i][j] += A[i][k] * B[k][j]
     return result
+
+def equal(A, B):
+    if len(A) != len(B) or len(A[0]) != len(B[0]):
+        return False
+    else:
+        for i in xrange(len(A)):
+            for j in xrange(len(A[0])):
+                if A[i][j] != B[i][j]:
+                    return False
+    return True
