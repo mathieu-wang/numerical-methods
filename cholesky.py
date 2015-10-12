@@ -33,6 +33,11 @@ def back_substitution(L, y):
         x[i][0] = (y[i][0] - sum) * 1.0 / L[i][i]
     return x
 
+def solve(A, b):
+    L = decompose(A)
+    y = forward_elim(L, b)
+    x = back_substitution(L, y)
+    return x
 
 if __name__ == "__main__":
     A1 = [[25, 15, -5],
@@ -42,26 +47,5 @@ if __name__ == "__main__":
           [2],
           [3]]
     b1 = mult(A1, x1)
-    pprint(b1)
 
-    L1 = decompose(A1)
-    pprint(L1)
-
-    L1transpose = transpose(L1)
-    pprint(L1transpose)
-
-    product = mult(L1, L1transpose)
-
-    pprint(equal(product, A1)) # SAME AS A --> DECOMPOSITION SUCCESSFUL!
-
-    y1 = forward_elim(L1, b1)
-    x1chol = back_substitution(L1, y1)
-
-    pprint(x1chol)
-    print(equal(x1, x1chol))
-
-    m2 = [[18, 22,  54,  42],
-          [22, 70,  86,  62],
-          [54, 86, 174, 134],
-          [42, 62, 134, 106]]
-    pprint(decompose(m2), width=120)
+    pprint(equal(solve(A1, b1), x1))
