@@ -2,7 +2,6 @@ from __future__ import print_function
 
 from pprint import pprint
 from math import sqrt
-from util import transpose
 from util import mult
 from util import equal
 
@@ -16,7 +15,7 @@ def decompose(A):
     return L
 
 
-def forward_elim(L, b):
+def forward_elimination(L, b):
     for j in xrange(len(L)):
         b[j][0] = b[j][0]/L[j][j]
         for i in range(j+1, len(L)):
@@ -35,7 +34,7 @@ def back_substitution(L, y):
 
 def solve(A, b):
     L = decompose(A)
-    y = forward_elim(L, b)
+    y = forward_elimination(L, b)
     x = back_substitution(L, y)
     return x
 
