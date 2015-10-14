@@ -20,3 +20,10 @@ def equal(A, B):
                 if A[i][j] != B[i][j]:
                     return False
     return True
+
+def vector_to_diag_matrix(y):
+    for idx, val in enumerate(y): # Make y diagonal
+        for i in xrange(len(y)-1-idx):
+            val.append(0)
+        for i in xrange(idx):
+            val.insert(0, 0)
