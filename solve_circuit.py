@@ -12,8 +12,8 @@ def read_circuit_from_file(filename):
 
     num_branches = int(lines[0])
     J = [[float(line.split(' ')[0])] for line in lines[1:1+num_branches]]
-    y = [[1/float(line.split(' ')[1])] for line in lines[1:1+num_branches]]
-    vector_to_diag_matrix(y) # pad with zeros to produce diagonal matrix
+    R_inv = [[1/float(line.split(' ')[1])] for line in lines[1:1+num_branches]]
+    y = vector_to_diag_matrix(R_inv) # pad with zeros to produce diagonal matrix
     E = [[float(line.split(' ')[2])] for line in lines[1:1+num_branches]]
     A = [[float(val) for val in line.split()] for line in lines[1+num_branches:]]
 

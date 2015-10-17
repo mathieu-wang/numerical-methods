@@ -3,8 +3,6 @@ def transpose(A):
 
 def mult(A, B):
     result = [[0 for x in xrange(len(B[0]))] for x in xrange(len(A))]
-    from pprint import pprint
-    #pprint(result)
     for i in xrange(len(A)):
        for j in xrange(len(B[0])):
            for k in range(len(B)):
@@ -21,9 +19,11 @@ def equal(A, B):
                     return False
     return True
 
-def vector_to_diag_matrix(y):
-    for idx, val in enumerate(y): # Make y diagonal
-        for i in xrange(len(y)-1-idx):
+def vector_to_diag_matrix(vector):
+    diag = [[e for e in innerlist] for innerlist in vector]
+    for idx, val in enumerate(diag): # Make y diagonal
+        for i in xrange(len(diag)-1-idx):
             val.append(0)
         for i in xrange(idx):
             val.insert(0, 0)
+    return diag
