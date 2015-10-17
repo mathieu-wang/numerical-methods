@@ -19,15 +19,25 @@ def read_circuit_from_file(filename):
 
     A_transpose = transpose(A)
 
-    AyAt = mult(mult(A, y), A_transpose)
-    b = mult(A, J) #TODO add -JE
-
-    pprint(solve(AyAt, b))
-
-    pprint(J)
-    pprint(E)
     pprint(A)
     pprint(y)
+    pprint(A_transpose)
+    pprint(mult(A, y))
+
+    AyAt = mult(mult(A, y), A_transpose)
+
+    pprint(AyAt)
+
+    pprint(J)
+    b = mult(A, J) #TODO add -JE
+
+    pprint(b)
+    pprint(solve(AyAt, b))
+
+    # pprint(J)
+    # pprint(E)
+    # pprint(A)
+    # pprint(y)
 
 if __name__ == "__main__":
     read_circuit_from_file('circuit1.txt')
