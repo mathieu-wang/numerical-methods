@@ -1,4 +1,5 @@
 from util import print_mat
+from util import format_mat
 
 
 def connect_last_node_to_first(matrix):
@@ -32,6 +33,10 @@ def generate_circuit_file(N):
     remove_unnecessary_data(matrix)
 
     print_mat(matrix)
+
+    with open("linearResistorNetwork{}x{}.txt".format(N, 2*N), 'w') as f:
+        f.write(str(num_branches)+"\n")
+        f.write(format_mat(matrix))
 
 
 if __name__ == '__main__':

@@ -75,8 +75,12 @@ def minor(x, i, j):
 
 
 def print_mat(matrix):
+    print format_mat(matrix)
+
+
+def format_mat(matrix):
     p = PrettyTable()
     for row in matrix:
         p.add_row(row)
 
-    print p.get_string(header=False, border=False)
+    return p.get_string(header=False, border=False)
