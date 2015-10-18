@@ -1,20 +1,19 @@
 from util import print_mat
-from util import format_mat
 from solve_circuit import read_circuit_from_file
 from solve_circuit import solve_circuit
 
 
 def connect_last_node_to_first(incidence_matrix):
-    for ind, value in enumerate(incidence_matrix[-1]):
+    for ind, value in enumerate(incidence_matrix[1]):
         if value != 0:
-            incidence_matrix[1][ind] = value
+            incidence_matrix[-1][ind] = value
 
 
 def remove_unnecessary_data(incidence_matrix):
     del incidence_matrix[0]
-    del incidence_matrix[-1]
     for row in incidence_matrix:
         del row[0]
+    del incidence_matrix[0]
     del incidence_matrix[-1] # TO GET REDUCED
 
 
@@ -34,12 +33,10 @@ def generate_circuit_file(N):
         incidence_matrix[j - num_cols_before][j] = 1
         incidence_matrix[j - num_cols_before + (2*N + 1)][j] = -1
 
-    print_mat(incidence_matrix)
-
     connect_last_node_to_first(incidence_matrix)
     remove_unnecessary_data(incidence_matrix)
 
-    # print_mat(incidence_matrix)
+    print_mat(incidence_matrix)
 
     jre_matrix = [[0 for x in xrange(3)] for x in xrange(num_branches)]
     for i in xrange(num_branches):
@@ -47,8 +44,6 @@ def generate_circuit_file(N):
 
     jre_matrix[0][2] = 10
     jre_matrix[num_branches / 2 + 1][2] = 10
-    # print_mat(jre_matrix)
-    # print(format_matrix_for_file(jre_matrix))
 
     filename = "linearResistorNetwork{}x{}.txt".format(N, 2*N)
     with open(filename, 'w') as f:
@@ -69,13 +64,9 @@ def format_matrix_for_file(matrix):
 
 
 if __name__ == '__main__':
-    N = 4
+    N = 2
     filename, num_branches = generate_circuit_file(N)
     J, y, E, A = read_circuit_from_file(filename)
     Vn = solve_circuit(J, y, E, A)
-    # print_mat(Vn)
-
-    # print Vn[2*N]
     total_current = (10-Vn[0][0])/1000 + (10-Vn[2*N][0])/1000
-    # print total_current
-    # print 10/total_current
+    print 10/total_current
