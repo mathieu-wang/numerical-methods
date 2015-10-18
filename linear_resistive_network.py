@@ -1,6 +1,19 @@
 from util import print_mat
 
 
+def connect_last_node_to_first(matrix):
+    for ind, value in enumerate(matrix[-1]):
+        if value != 0:
+            matrix[1][ind] = value
+
+
+def remove_unnecessary_data(matrix):
+    del matrix[0]
+    del matrix[-1]
+    for row in matrix:
+        del row[0]
+
+
 # Generate a Nx2N linear resistor network with 1kOhm resistors and a 10V external voltage source that connects the
 # bottom left and top right corners
 def generate_circuit_file(N):
@@ -15,8 +28,11 @@ def generate_circuit_file(N):
         matrix[j - num_branches / 2 - 1][j] = 1
         matrix[j - num_branches / 2 - 1 + (2*N + 1)][j] = -1
 
+    connect_last_node_to_first(matrix)
+    remove_unnecessary_data(matrix)
+
     print_mat(matrix)
 
 
 if __name__ == '__main__':
-    generate_circuit_file(1)
+    generate_circuit_file(2)
