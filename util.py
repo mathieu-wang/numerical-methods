@@ -5,6 +5,28 @@ def transpose(A):
     return [list(x) for x in zip(*A)]
 
 
+def add(A, B):
+    if len(A) != len(B) or len(A[0]) != len(B[0]):
+        raise ArithmeticError("Size of matrices don't match!")
+    else:
+        result = [[0 for x in xrange(len(A[0]))] for x in xrange(len(A))]
+        for i in xrange(len(A)):
+            for j in xrange(len(A[0])):
+                result[i][j] += A[i][j] + B[i][j]
+        return result
+
+
+def subtract(A, B):
+    if len(A) != len(B) or len(A[0]) != len(B[0]):
+        raise ArithmeticError("Size of matrices don't match!")
+    else:
+        result = [[0 for x in xrange(len(A[0]))] for x in xrange(len(A))]
+        for i in xrange(len(A)):
+            for j in xrange(len(A[0])):
+                result[i][j] += A[i][j] - B[i][j]
+        return result
+
+
 def mult(A, B):
     result = [[0 for x in xrange(len(B[0]))] for x in xrange(len(A))]
     for i in xrange(len(A)):

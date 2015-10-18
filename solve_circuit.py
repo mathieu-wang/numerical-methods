@@ -1,6 +1,7 @@
 from cholesky import solve
 from util import vector_to_diag_matrix
 from util import transpose
+from util import subtract
 from util import mult
 from pprint import pprint
 
@@ -17,27 +18,20 @@ def read_circuit_from_file(filename):
     E = [[float(line.split(' ')[2])] for line in lines[1:1+num_branches]]
     A = [[float(val) for val in line.split()] for line in lines[1+num_branches:]]
 
-    A_transpose = transpose(A)
+    return J, y, E, A
 
-    pprint(A)
-    pprint(y)
-    pprint(A_transpose)
-    pprint(mult(A, y))
+
+def solve_circuit(J, y, E, A):
+    A_transpose = transpose(A)
 
     AyAt = mult(mult(A, y), A_transpose)
 
-    pprint(AyAt)
+    b = mult(A, subtract(J, mult(y, E)))
+    Vn = solve(AyAt, b)
+    return Vn
 
-    pprint(J)
-    b = mult(A, J) #TODO add -JE
-
-    pprint(b)
-    pprint(solve(AyAt, b))
-
-    # pprint(J)
-    # pprint(E)
-    # pprint(A)
-    # pprint(y)
 
 if __name__ == "__main__":
-    read_circuit_from_file('circuit1.txt')
+    J, y, E, A = read_circuit_from_file('circuit1.txt')
+    Vn = solve_circuit(J, y, E, A)
+    pprint(Vn)
