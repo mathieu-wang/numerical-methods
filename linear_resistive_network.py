@@ -24,13 +24,17 @@ def generate_circuit_file(N):
     num_branches = 8 * ((N + 1) * N) / 2 - N  # 8*[Sum from i to N] - N
     num_nodes = (2 * N + 1) * (N + 1)
     incidence_matrix = [[0 for x in xrange(num_branches + 1)] for x in xrange(num_nodes + 1)]
-    for j in range(1, num_branches / 2 + 2):
-        incidence_matrix[j + (j - 1) / (2 * N)][j] = 1
-        incidence_matrix[j + (j - 1) / (2 * N) + 1][j] = -1
+    for j in range(1, (N+1)*2*N +1):
+        num_rows_before = (j - 1) / (2 * N)
+        incidence_matrix[j + num_rows_before][j] = 1
+        incidence_matrix[j + num_rows_before + 1][j] = -1
 
-    for j in range(num_branches / 2 + 2, num_branches + 1):
-        incidence_matrix[j - num_branches / 2 - 1][j] = 1
-        incidence_matrix[j - num_branches / 2 - 1 + (2*N + 1)][j] = -1
+    for j in range((N+1)*2*N+1, num_branches+1):
+        num_cols_before = (N+1)*2*N
+        incidence_matrix[j - num_cols_before][j] = 1
+        incidence_matrix[j - num_cols_before + (2*N + 1)][j] = -1
+
+    print_mat(incidence_matrix)
 
     connect_last_node_to_first(incidence_matrix)
     remove_unnecessary_data(incidence_matrix)
@@ -44,7 +48,7 @@ def generate_circuit_file(N):
     jre_matrix[0][2] = 10
     jre_matrix[num_branches / 2 + 1][2] = 10
     # print_mat(jre_matrix)
-    print(format_matrix_for_file(jre_matrix))
+    # print(format_matrix_for_file(jre_matrix))
 
     filename = "linearResistorNetwork{}x{}.txt".format(N, 2*N)
     with open(filename, 'w') as f:
@@ -65,8 +69,13 @@ def format_matrix_for_file(matrix):
 
 
 if __name__ == '__main__':
-    N = 2
+    N = 4
     filename, num_branches = generate_circuit_file(N)
     J, y, E, A = read_circuit_from_file(filename)
     Vn = solve_circuit(J, y, E, A)
-    print_mat(Vn)
+    # print_mat(Vn)
+
+    # print Vn[2*N]
+    total_current = (10-Vn[0][0])/1000 + (10-Vn[2*N][0])/1000
+    # print total_current
+    # print 10/total_current
