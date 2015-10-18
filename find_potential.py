@@ -54,9 +54,13 @@ def sor(v_inner, w_inner, h_inner, length_outer, h, omega):
     return mesh_matrix
 
 
+def find_potential_at_point(potential_matrix, x_coord, y_coord):
+    node_x = int(x_coord / h)
+    node_y = int(y_coord / h)
+    return potential_matrix[node_x][node_y]
+
 if __name__ == '__main__':
     h = 0.02
     potential_matrix = sor(15, 0.08, 0.04, 0.2, h, 1.0)
-    node_x = int(0.06 / h)
-    node_y = int(0.04 / h)
-    print potential_matrix[node_x][node_y]
+    print find_potential_at_point(potential_matrix, 0.06, 0.04)
+
