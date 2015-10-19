@@ -1,6 +1,8 @@
 from util import print_mat
 from solve_circuit import read_circuit_from_file
 from solve_circuit import solve_circuit
+from solve_circuit import solve_circuit_with_band
+import time
 
 
 def connect_last_node_to_first(incidence_matrix):
@@ -13,7 +15,7 @@ def remove_unnecessary_data(incidence_matrix):
     del incidence_matrix[0]
     for row in incidence_matrix:
         del row[0]
-    print_mat(incidence_matrix)
+    # print_mat(incidence_matrix)
     del incidence_matrix[0]
     del incidence_matrix[-1] # TO GET REDUCED
 
@@ -65,9 +67,14 @@ def format_matrix_for_file(matrix):
 
 
 if __name__ == '__main__':
-    N = 
+    N = 3
     filename, num_branches = generate_circuit_file(N)
     J, y, E, A = read_circuit_from_file(filename)
-    Vn = solve_circuit(J, y, E, A)
+    start = time.time()
+    # Vn = solve_circuit(J, y, E, A)
+    Vn = solve_circuit_with_band(J, y, E, A, N+2)
+    end = time.time()
+    print end-start
+
     total_current = (10-Vn[0][0])/1000 + (10-Vn[2*N][0])/1000
     print 10/total_current
