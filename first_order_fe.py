@@ -17,8 +17,22 @@ def edge(nodes, i):
     next_i = (i + 1) % len_nodes
     return subtract(nodes[prev_i], nodes[next_i])
 
-def get_local_s_matrix():
-    pass
+def get_local_s_matrix(nodes):
+    len_nodes = len(nodes)
+    S = [[0 for x in xrange(len_nodes)] for x in xrange(len_nodes)]
+    for i in xrange(len_nodes):
+        for j in xrange(len_nodes):
+            edge_i = edge(nodes, i)
+            edge_j = edge(nodes, j)
+            dot_product = dot(edge_i, edge_j)
+            area = area_of_triangle(nodes)
+            S[i][j] = dot_product/(4*area)
+    return S
+
+def area_of_triangle(nodes):
+    edge2 = edge(nodes, 1)
+    edge3 = edge(nodes, 2)
+    return 0.5*cross(edge2, edge3)
 
 if __name__ == '__main__':
     nodes = [[0.00, 0.02],
@@ -30,3 +44,8 @@ if __name__ == '__main__':
     print(edge(nodes, 2))
 
     print dot(edge(nodes, 0), edge(nodes, 1))
+
+    print area_of_triangle(nodes)
+
+    S = get_local_s_matrix(nodes)
+    print_mat(S)
