@@ -17,6 +17,8 @@ def add(A, B):
 
 
 def subtract(A, B):
+    if type(A[0]) is float:
+        return [A[i] - B[i] for i in xrange(len(A))]
     if len(A) != len(B) or len(A[0]) != len(B[0]):
         raise ArithmeticError("Size of matrices don't match!")
     else:
@@ -34,6 +36,21 @@ def mult(A, B):
             for k in range(len(B)):
                 result[i][j] += A[i][k] * B[k][j]
     return result
+
+def cross(A, B): # 2D cross product
+    c = [A[1]*B[2] - A[2]*B[1],
+         A[2]*B[0] - A[0]*B[2],
+         A[0]*B[1] - A[1]*B[0]]
+    return c
+
+def dot(v1, v2):
+    if len(v1) != len(v2):
+        raise ArithmeticError("Size of vectors don't match!")
+    else:
+        sum = 0
+        for i in xrange(len(v1)):
+            sum += (v1[i] * v2[i])
+        return sum
 
 
 def equal(A, B):
