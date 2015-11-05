@@ -120,10 +120,11 @@ def read_coordinates(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
 
-    for line in lines:
+    for line in lines[:34]:
         splitted_line = line.split()
+        print splitted_line
 
-        while splitted_line:
+        if splitted_line:
             coordinates.append([float(splitted_line[1]), float(splitted_line[2])])
     return coordinates
 
