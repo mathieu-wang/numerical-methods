@@ -56,33 +56,23 @@ def get_global_s_matrix(nodes1, nodes2):
     return S
 
 
-def get_capacitance():
+def get_capacitance(W):
     # W = 0.5 * C * V^2
     V = 10
-    W = get_total_energy()
     C = 2*W/(V*V)
+    return C
 
 
-def get_total_energy(meshes):
+def get_total_energy(elements, coordinates, potentials):
     total_energy = 0
-    for mesh in meshes:
-        energy = get_mesh_energy(mesh)
+    for element in elements:
+        energy = get_element_energy(element, coordinates, potentials)
         total_energy += energy
-    return total_energy
-
-
-def get_mesh_energy(nodes_1, nodes_2):
-    # 7, 1, 2, 8
-    Ucon = [[10],
-            [10],
-            [6.0612],
-            [5.7050]]
-    S = get_global_s_matrix(nodes_1, nodes_2)
-    W = 0.5 * mult(mult(transpose(Ucon), S), Ucon)
-    return W
+    return total_energy*4 # symmetry
 
 
 def get_element_energy(node_indices, coordinates, potentials):
+    epsilon0 = 8.854187817 * pow(10, -12)
     nodes = []
     U = []
     for node_index in node_indices:
@@ -92,7 +82,7 @@ def get_element_energy(node_indices, coordinates, potentials):
     S = get_local_s_matrix(nodes)
     U_transpose = transpose(U)
     first_mult = mult(U_transpose, S)
-    W = 0.5 * mult(first_mult, U)[0][0] # convert 1x1 matrix to scalar value
+    W = 0.5 * epsilon0 * mult(first_mult, U)[0][0] # convert 1x1 matrix to scalar value
     return W
 
 
@@ -122,13 +112,23 @@ def read_coordinates(filename):
 
     for line in lines[:34]:
         splitted_line = line.split()
-        print splitted_line
 
         if splitted_line:
             coordinates.append([float(splitted_line[1]), float(splitted_line[2])])
     return coordinates
 
 
+def read_elements(filename):
+    elements = []
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    for line in lines[35:81]:
+        splitted_line = line.split()
+
+        if splitted_line:
+            elements.append([int(splitted_line[0]), int(splitted_line[1]), int(splitted_line[2])])
+    return elements
 
 if __name__ == '__main__':
     nodes_1 = [[0.00, 0.02],
@@ -139,59 +139,26 @@ if __name__ == '__main__':
                [0.00, 0.02],
                [0.02, 0.00]]
 
-    nodes_3 = [[0.04, 0.02],
-               [0.04, 0.00],
-               []]
-
     # print(edge(nodes_1, 0))
     # print(edge(nodes_1, 1))
     # print(edge(nodes_1, 2))
 
     # print dot(edge(nodes_1, 0), edge(nodes_1, 1))
 
-    print area_of_triangle(nodes_1)
-    print area_of_triangle(nodes_2)
-
     S1 = get_local_s_matrix(nodes_1)
+    print "Local S matrix for element 1:"
     print_mat(S1)
-    print ""
+    print "Local S matrix for element 2:"
     S2 = get_local_s_matrix(nodes_2)
     print_mat(S2)
-    print ""
+    print "Global S matrix for elements 1 and 2:"
     S = get_global_s_matrix(nodes_1, nodes_2)
     print_mat(S)
 
-    mesh_indices = [[0, 0, 0, 0],#node numbers
-                    [7, 1, 2, 8],
-                    [8, 2, 3, 9]]
-
-
-    # print get_capacitance()
-    # print get_mesh_energy(nodes_1, nodes_2)
-
-    elements = [[1, 2, 7],
-                [2, 3, 8]]
-
-    coordinates = [[0, 0],
-                   [0.04, 0],
-                   [0.06, 0],
-                   [0.08, 0],
-                   [0.1, 0],
-                   [0, 0.02],
-                   [0.02, 0.02],
-                   [0.04, 0.02]]
-
-    # potentials = [[0],
-    #               [10],
-    #               [6.0612],
-    #               [2.8350],
-    #               [0],
-    #               [10],
-    #               [10],
-    #               [10]]
-
-    potentials = read_potentials('potentials.txt')
+    elements = read_elements('data.txt')
     coordinates = read_coordinates('data.txt')
-    print coordinates
+    potentials = read_potentials('potentials.txt')
 
-    print get_element_energy([1, 2, 7], coordinates, potentials)
+    W = get_total_energy(elements, coordinates, potentials)
+    print "Total Energy:", W/(pow(10, -9)), "nJ"
+    print "Capacitance per unit length:", get_capacitance(W)/(pow(10, -12)), "pF"
