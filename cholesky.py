@@ -12,7 +12,10 @@ def decompose(A):
     for i in xrange(len(A)):
         for j in xrange(i+1):
             s = sum(L[i][k] * L[j][k] for k in xrange(j))
-            L[i][j] = sqrt(A[i][i] - s) if (i == j) else (1.0 / L[j][j] * (A[i][j] - s))
+            product = L[j][j] * (A[i][j] - s)
+            if product == 0:
+                raise ArithmeticError("Trying to divide by zero: matrix is not positive definite.")
+            L[i][j] = sqrt(A[i][i] - s) if (i == j) else (1.0 / product)
     return L
 
 
@@ -59,7 +62,6 @@ def back_substitution(L, y):
             sum += L[j][i] * x[j][0]
         x[i][0] = (y[i][0] - sum) * 1.0 / L[i][i]
     return x
-
 
 
 def solve(A, b):

@@ -1,5 +1,7 @@
 from finite_difference_methods import sor
 from finite_difference_methods import jacobi
+from cholesky import solve
+from util import print_mat
 
 
 def find_potential_at_point(potential_matrix, x_coord, y_coord):
@@ -78,3 +80,10 @@ if __name__ == '__main__':
     # test_sor_variable_omega(h)
     # test_sor_jacobi_variable_h(h)
 
+    A, initial_x, b, indices = setup_matrix_equation()
+
+    try:
+        x_chol = solve(A, b)
+        print_mat(x_chol)
+    except ArithmeticError as e:
+        print e
