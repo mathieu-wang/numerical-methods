@@ -1,4 +1,4 @@
-from finite_difference_methods import conjugate_gradient
+from finite_difference_methods import cg
 from finite_difference_methods import sor
 from finite_difference_methods import jacobi
 from cholesky import solve
@@ -100,6 +100,13 @@ if __name__ == '__main__':
     # print_mat(x_chol)
     # print(x_chol[11])
 
-    x_cg = conjugate_gradient(A_pos_def, b_new, initial_x)
-    print_mat(x_cg)
+    x_cg, norm_2, norm_inf = cg(A_pos_def, b_new, initial_x)
+    # print_mat(x_cg)
     print(x_cg[11])
+
+    print "2-Norm"
+    for e in norm_2:
+        print e
+    print "Infinity Norm"
+    for e in norm_inf:
+        print e

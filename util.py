@@ -1,4 +1,5 @@
 from prettytable import PrettyTable
+import math
 
 
 def transpose(A):
@@ -29,12 +30,41 @@ def subtract(A, B):
         return result
 
 
+def scalar_mult(A, c):
+    result = [[A[i][j] for j in xrange(len(A[0]))] for i in xrange(len(A))]
+    for i in xrange(len(A)):
+        for j in xrange(len(A[i])):
+            result[i][j] *= c
+    return result
+
+
 def mult(A, B):
     result = [[0 for x in xrange(len(B[0]))] for x in xrange(len(A))]
     for i in xrange(len(A)):
         for j in xrange(len(B[0])):
             for k in range(len(B)):
                 result[i][j] += A[i][k] * B[k][j]
+    return result
+
+
+def norm(v, p):
+    result = 0
+    if p == 1:
+        for num in v:
+            num = num[0]
+            result += abs(num)
+    elif p == 2:
+        for num in v:
+            num = num[0]
+            result += num*num
+        result = math.sqrt(result)
+    elif p == 'inf':
+        max = abs(v[0][0])
+        for num in v:
+            num_abs = abs(num[0])
+            if num_abs > max:
+                max = num_abs
+        result = max
     return result
 
 
@@ -100,3 +130,9 @@ def format_mat(matrix):
         p.add_row(row)
 
     return p.get_string(header=False, border=False)
+
+if __name__ == '__main__':
+    a = [[2, 2.2, 3.3],
+     [-1, 32.2, 2]]
+
+    print_mat(scalar_mult(a, 5))

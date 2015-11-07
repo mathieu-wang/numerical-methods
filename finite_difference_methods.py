@@ -1,28 +1,44 @@
-import numpy as np
 from util import subtract
+from util import add
 from util import mult
+from util import scalar_mult
+from util import transpose
+from util import norm
 
-def conjugate_gradient(A, b, x_initial):
+
+def cg(A, b, x0):
     error = 0.00001
-
-    x = x_initial
-    # r0 = subtract(b, mult(A, x))
-    r0 = b - np.dot(A, x)
+    x = x0
+    r0 = subtract(b, mult(A, x))
     p = r0
+    i = 0
+    norm_2 = []
+    norm_inf = []
+    while True:
+        r0_transpose = transpose(r0)
+        p_transpose = transpose(p)
+        num = mult(r0_transpose, r0)[0][0]
+        denom = mult(mult(p_transpose, A), p)[0][0]
+        alpha = float(num) / float(denom)
+        x = add(x, scalar_mult(p, alpha))
+        alphaA = scalar_mult(A, alpha)
+        alphaAp = mult(alphaA, p)
+        ri = subtract(r0, alphaAp)
 
-    #   Start iterations
-    for i in xrange(100000000000):
-        a = float(np.dot(r0.T, r0) / np.dot(np.dot(p.T, A), p))
-        x = x + p * a
-        ri = r0 - np.dot(np.asarray(A) * a, p)
+        ri_norm = norm(ri, 1)
+        print i, ri_norm
+        norm_2.append(norm(ri, 2))
+        norm_inf.append(norm(ri, 'inf'))
 
-        print i, np.linalg.norm(ri)
-
-        if np.linalg.norm(ri) < error:
-            return x
-        beta = float(np.dot(ri.T, ri) / np.dot(r0.T, r0))
-        p = ri + beta * p
+        if ri_norm < error:
+            return x, norm_2, norm_inf
+        ri_transpose = transpose(ri)
+        num = mult(ri_transpose, ri)[0][0]
+        denom = mult(r0_transpose, r0)[0][0]
+        beta = float(num) / float(denom)
+        p = add(ri, scalar_mult(p, beta))
         r0 = ri
+        i += 1
     return x
 
 

@@ -4,7 +4,6 @@ from util import print_mat
 from util import subtract
 from util import transpose
 from util import mult
-import re
 
 
 def edge(nodes, i):
