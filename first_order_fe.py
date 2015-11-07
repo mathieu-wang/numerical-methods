@@ -93,7 +93,7 @@ def area_of_triangle(nodes):
 
 
 def read_potentials(filename):
-    potentials = [[0.0]]
+    potentials = [[-1.0]]
     with open(filename, 'r') as f:
         lines = f.readlines()
 

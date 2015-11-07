@@ -2,6 +2,8 @@ from finite_difference_methods import sor
 from finite_difference_methods import jacobi
 from cholesky import solve
 from util import print_mat
+from util import transpose
+from util import mult
 
 
 def find_potential_at_point(potential_matrix, x_coord, y_coord):
@@ -87,3 +89,11 @@ if __name__ == '__main__':
         print_mat(x_chol)
     except ArithmeticError as e:
         print e
+
+    A_transpose = transpose(A)
+    A_pos_def = mult(A_transpose, A)
+    b_new = mult(A_transpose, b)
+
+    print_mat(A_pos_def)
+    print_mat(b_new)
+    # x_chol = solve(A_pos_def, b_new)
