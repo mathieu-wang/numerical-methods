@@ -37,8 +37,10 @@ def mult(A, B):
                 result[i][j] += A[i][k] * B[k][j]
     return result
 
+
 def cross(v1, v2): # 2D cross product
     return v1[0]*v2[1]-v1[1]*v2[0]
+
 
 def dot(v1, v2):
     if len(v1) != len(v2):

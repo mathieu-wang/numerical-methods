@@ -1,3 +1,4 @@
+from finite_difference_methods import conjugate_gradient
 from finite_difference_methods import sor
 from finite_difference_methods import jacobi
 from cholesky import solve
@@ -84,16 +85,21 @@ if __name__ == '__main__':
 
     A, initial_x, b, indices = setup_matrix_equation()
 
+
     try:
         x_chol = solve(A, b)
         print_mat(x_chol)
-    except ArithmeticError as e:
+    except Exception as e:
         print e
 
     A_transpose = transpose(A)
     A_pos_def = mult(A_transpose, A)
     b_new = mult(A_transpose, b)
 
-    print_mat(A_pos_def)
-    print_mat(b_new)
     # x_chol = solve(A_pos_def, b_new)
+    # print_mat(x_chol)
+    # print(x_chol[11])
+
+    x_cg = conjugate_gradient(A_pos_def, b_new, initial_x)
+    print_mat(x_cg)
+    print(x_cg[11])

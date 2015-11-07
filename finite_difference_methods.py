@@ -1,3 +1,30 @@
+import numpy as np
+from util import subtract
+from util import mult
+
+def conjugate_gradient(A, b, x_initial):
+    error = 0.00001
+
+    x = x_initial
+    # r0 = subtract(b, mult(A, x))
+    r0 = b - np.dot(A, x)
+    p = r0
+
+    #   Start iterations
+    for i in xrange(100000000000):
+        a = float(np.dot(r0.T, r0) / np.dot(np.dot(p.T, A), p))
+        x = x + p * a
+        ri = r0 - np.dot(np.asarray(A) * a, p)
+
+        print i, np.linalg.norm(ri)
+
+        if np.linalg.norm(ri) < error:
+            return x
+        beta = float(np.dot(ri.T, ri) / np.dot(r0.T, r0))
+        p = ri + beta * p
+        r0 = ri
+    return x
+
 
 def sor(v_inner, w_inner, h_inner, length_outer, h, omega):
 
