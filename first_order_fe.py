@@ -71,7 +71,7 @@ def get_total_energy(elements, coordinates, potentials):
 
 
 def get_element_energy(node_indices, coordinates, potentials):
-    epsilon0 = 8.854187817 * pow(10, -12)
+    epsilon0 = 8.854187817e-12
     nodes = []
     U = []
     for node_index in node_indices:
@@ -145,12 +145,12 @@ if __name__ == '__main__':
     # print dot(edge(nodes_1, 0), edge(nodes_1, 1))
 
     S1 = get_local_s_matrix(nodes_1)
-    print "Local S matrix for element 1:"
+    print "Local S matrix for the bottom-left element:"
     print_mat(S1)
-    print "Local S matrix for element 2:"
+    print "Local S matrix for the top-right element:"
     S2 = get_local_s_matrix(nodes_2)
     print_mat(S2)
-    print "Global S matrix for elements 1 and 2:"
+    print "Global S matrix for both elements"
     S = get_global_s_matrix(nodes_1, nodes_2)
     print_mat(S)
 
