@@ -15,7 +15,7 @@ def find_potential_at_point(potential_matrix, x_coord, y_coord):
 
 def setup_matrix_equation():
     A = [[-4, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-         [1, -4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         [1, -4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          [1, 0, -4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          [0, 1, 1, -4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, -4, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -80,28 +80,39 @@ def test_sor_jacobi_variable_h(h):
 if __name__ == '__main__':
     h = 0.02
 
+    potential_matrix, num_iterations = sor(10, 0.08, 0.04, 0.2, h, 1.3)
+    potential = find_potential_at_point(potential_matrix, 0.06, 0.04)
+    print potential
+
     # test_sor_variable_omega(h)
     # test_sor_jacobi_variable_h(h)
 
     A, initial_x, b, indices = setup_matrix_equation()
 
+    # print_mat(A)
+    # print_mat(b)
 
     try:
+        print "Solving Ax=b using Cholesky decomposition"
         x_chol = solve(A, b)
         print_mat(x_chol)
     except Exception as e:
-        print e
+        print "Cholesky failed. Please make sure A is positive definite"
 
     A_transpose = transpose(A)
     A_pos_def = mult(A_transpose, A)
     b_new = mult(A_transpose, b)
 
+    # print_mat(A_pos_def)
+    # print_mat(b_new)
+
+    ## Comment out cholesky while doing cg because cholesky modifies the b vector
     # x_chol = solve(A_pos_def, b_new)
     # print_mat(x_chol)
     # print(x_chol[11])
 
     x_cg, norm_2, norm_inf = cg(A_pos_def, b_new, initial_x)
-    # print_mat(x_cg)
+    print_mat(x_cg)
     print(x_cg[11])
 
     print "2-Norm"
