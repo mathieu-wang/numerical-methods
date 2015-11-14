@@ -2,6 +2,9 @@ from prettytable import PrettyTable
 import math
 
 
+epsilon0 = 8.854187817e-12
+
+
 def transpose(A):
     return [list(x) for x in zip(*A)]
 

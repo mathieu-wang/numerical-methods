@@ -4,6 +4,7 @@ from util import print_mat
 from util import subtract
 from util import transpose
 from util import mult
+from util import epsilon0
 
 
 def edge(nodes, i):
@@ -71,7 +72,6 @@ def get_total_energy(elements, coordinates, potentials):
 
 
 def get_element_energy(node_indices, coordinates, potentials):
-    epsilon0 = 8.854187817e-12
     nodes = []
     U = []
     for node_index in node_indices:

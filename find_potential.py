@@ -1,10 +1,9 @@
 from finite_difference_methods import cg
 from finite_difference_methods import sor
 from finite_difference_methods import jacobi
-from cholesky import solve
-from util import print_mat
 from util import transpose
 from util import mult
+from util import epsilon0
 
 
 def find_potential_at_point(potential_matrix, x_coord, y_coord):
@@ -71,7 +70,7 @@ def get_potential_at_node(potentials, indices, node):  # Using binary search
         elif indices[mid] > node:
             right = mid - 1
         else:
-            return potentials[mid]
+            return potentials[mid][0]
 
 
 def test_sor_variable_omega(h):
@@ -95,7 +94,7 @@ if __name__ == '__main__':
 
     potential_matrix, num_iterations = sor(10, 0.08, 0.04, 0.2, h, 1.3)
     potential = find_potential_at_point(potential_matrix, 0.06, 0.04)
-    print potential
+    # print potential
 
     # test_sor_variable_omega(h)
     # test_sor_jacobi_variable_h(h)
@@ -125,8 +124,23 @@ if __name__ == '__main__':
     # print(x_chol[11])
 
     x_cg, norm_2, norm_inf = cg(A_pos_def, b_new, initial_x)
-    print get_potential_at_node(x_cg, indices, 19)
-    # print_mat(x_cg)
+    dV11_17 = get_potential_at_node(x_cg, indices, 11) - get_potential_at_node(x_cg, indices, 17)
+    dV12_18 = get_potential_at_node(x_cg, indices, 12) - get_potential_at_node(x_cg, indices, 18)
+    dV13_19 = get_potential_at_node(x_cg, indices, 13) - get_potential_at_node(x_cg, indices, 19)
+    dV14_20 = get_potential_at_node(x_cg, indices, 14) - get_potential_at_node(x_cg, indices, 20)
+    dV14_15 = get_potential_at_node(x_cg, indices, 14) - get_potential_at_node(x_cg, indices, 15)
+    dV18_9 = get_potential_at_node(x_cg, indices, 8) - get_potential_at_node(x_cg, indices, 9)
+    dV2_3 = get_potential_at_node(x_cg, indices, 2) - get_potential_at_node(x_cg, indices, 3)
+
+    sum_V = (dV11_17 + dV12_18 + dV13_19 + dV14_20 + dV14_15 + dV18_9 + dV2_3)
+    Q = 6.0/7.0 * epsilon0 * sum_V
+
+    C = 4*Q/10
+
+    print "Sum V:", sum_V
+    print "Q:", Q
+    print "C:", C
+
     # print(x_cg[11])
     #
     # print "2-Norm"

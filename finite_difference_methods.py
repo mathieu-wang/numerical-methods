@@ -26,7 +26,7 @@ def cg(A, b, x0):
         ri = subtract(r0, alphaAp)
 
         ri_norm = norm(ri, 1)
-        print i, ri_norm
+        # print i, ri_norm
         norm_2.append(norm(ri, 2))
         norm_inf.append(norm(ri, 'inf'))
 
