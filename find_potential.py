@@ -61,6 +61,19 @@ def setup_matrix_equation():
     return A, initial_x, b, indices
 
 
+def get_potential_at_node(potentials, indices, node):  # Using binary search
+    left = 0
+    right = len(indices) - 1
+    while True:
+        mid = left + (right - left) / 2
+        if indices[mid] < node:
+            left = mid + 1
+        elif indices[mid] > node:
+            right = mid - 1
+        else:
+            return potentials[mid]
+
+
 def test_sor_variable_omega(h):
     for omega_times_ten in range(10, 20):
         omega = float(omega_times_ten) / 10
@@ -92,12 +105,12 @@ if __name__ == '__main__':
     # print_mat(A)
     # print_mat(b)
 
-    try:
-        print "Solving Ax=b using Cholesky decomposition"
-        x_chol = solve(A, b)
-        print_mat(x_chol)
-    except Exception as e:
-        print "Cholesky failed. Please make sure A is positive definite"
+    # try:
+    #     print "Solving Ax=b using Cholesky decomposition"
+    #     x_chol = solve(A, b)
+    #     print_mat(x_chol)
+    # except Exception as e:
+    #     print "Cholesky failed. Please make sure A is positive definite"
 
     A_transpose = transpose(A)
     A_pos_def = mult(A_transpose, A)
@@ -112,12 +125,13 @@ if __name__ == '__main__':
     # print(x_chol[11])
 
     x_cg, norm_2, norm_inf = cg(A_pos_def, b_new, initial_x)
-    print_mat(x_cg)
-    print(x_cg[11])
-
-    print "2-Norm"
-    for e in norm_2:
-        print e
-    print "Infinity Norm"
-    for e in norm_inf:
-        print e
+    print get_potential_at_node(x_cg, indices, 19)
+    # print_mat(x_cg)
+    # print(x_cg[11])
+    #
+    # print "2-Norm"
+    # for e in norm_2:
+    #     print e
+    # print "Infinity Norm"
+    # for e in norm_inf:
+    #     print e
